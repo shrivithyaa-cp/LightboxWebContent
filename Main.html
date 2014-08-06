@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style type="text/css">
+#lightbox {  
+  display:none;  
+  background:#c0c0c0;  
+  opacity:0.9;  
+  filter:alpha(opacity=90);  
+  position:fixed;  
+  top:0;  
+  left:0;  
+  min-width:100%;  
+  min-height:100%; 
+  padding-top: 15%; 
+  padding-left: 30%;
+}
+
+#lightboxTitle {
+	background-color: none;
+	padding: 5px;
+}
+
+#content {
+		position: center;
+  		border: solid;
+  		border-color: gray;
+  		height: 200px;
+  		width: 400px;
+  		padding: 10px;
+  		
+}
+
+.ui-progressbar.beginning .ui-progressbar-value { background: blue; }
+
+.ui-progressbar.end .ui-progressbar-value { background: green; }
+
+#progressbar {
+        background-color: blue;
+        height: 22px;
+        border: 1px solid #111;
+        width: 100%;
+        position: center;
+        
+}
+ 
+#progressbar div {
+        height: 100%;
+        color:  blue;
+        width: 0;
+        background-color: blue;
+}
+#table{
+border: none;
+width: 100%;
+height: 100%;
+}
+#table tr{
+width: 100%;
+padding: 0px;
+border: none;
+}
+
+#table tr td{
+border: none;
+}
+</style>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css">
+<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+<script src="//code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
+<script type="text/javascript">
+jQuery(document).ready(function($) {
+	
+	$.ajax({
+	       url: "js/data.json",
+	           //force to handle it as text
+	       dataType: "text",
+	            success: function (dataTest) {
+
+	                //data downloaded so we call parseJSON function 
+	                //and pass downloaded data
+	                var json = $.parseJSON(dataTest);
+	                
+	                var start = json.data.lightbox.start;
+	                var duration = json.data.lightbox.duration;
+	                var finish = json.data.lightbox.finish
+	                var easing = 'swing';
+	                var complete = null;
+	                $(function() {
+	                    var progressbar = $( "#progressbar" );
+	                       $( "#progressbar" ).progressbar({
+	                          value: 1,
+	                          max:finish
+	                       });
+	                    function progress() {
+	                    var val = progressbar.progressbar( "value" ) || start;
+	                    progressbar.progressbar( "value", val + 1 );
+	                    if ( val < finish ) {
+	                       setTimeout( progress, 10 );
+	                       progressbar.progressbar("value").addClass("beginning");
+	                    }
+	                    else if(val == finish){
+	                    	progressbar.append('<div id="created_div">Progress Complete</div>');
+	                    }
+	                 }
+	                 setTimeout( progress, duration );
+	              });
+	                
+	            }
+	
+
+	  });
+	
+	
+//jQuery.noConflict(); 
+
+$('.lightbox_trigger').click(function() {
+        $('#lightbox').show();
+        $('#progressbar').progressbar();
+        $("body").css("overflow", "hidden");
+});
+
+$('.reset').click(function() {
+        $('#progressbar').progressbar("destroy");
+        window.location.reload();
+        $("body").css("overflow", "hidden");
+});
+
+$('#closeLink').click( function() { 
+    $('#lightbox').hide();
+});
+
+
+});
+
+</script>
+<meta charset="ISO-8859-1">
+<title>Hello World</title>
+</head>
+<body>
+	<div id="wrapper">
+		<h1>Lightbox</h1>
+		<p>Simple lightbox demo.
+			
+				<button class="lightbox_trigger">Show Progress</button>
+			
+		</p>
+		<br/>
+		<button class="reset">Reset</button>
+		
+	</div>
+	<!-- #/wrapper -->
+	
+	<div id="lightbox" >
+		<div id="content">
+		<table id="table">
+		<tr height="30%"><td align="left" width="70%">
+		<div id="lightboxTitle">Progress</div>
+		</td>
+		<td align="right">
+		<img id="closeLink" alt="" src="/images/close.png" border="none">
+		</td>
+		</tr>
+		<tr align="center"><td align="center" width="100%">
+		<div id="progressbar"></div>
+		</td></tr>
+		</table>
+		</div>
+	</div>
+
+</body>
+</html>
