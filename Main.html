@@ -17,8 +17,10 @@
 }
 
 #lightboxTitle {
-	background-color: none;
-	padding: 5px;
+	background-color: gray;
+	max-width:25px;
+	vertical-align: middle;
+	padding-left: 5px;
 }
 
 #content {
@@ -27,13 +29,10 @@
   		border-color: gray;
   		height: 200px;
   		width: 400px;
-  		padding: 10px;
+  		padding: 5px;
   		
 }
 
-.ui-progressbar.beginning .ui-progressbar-value { background: blue; }
-
-.ui-progressbar.end .ui-progressbar-value { background: green; }
 
 #progressbar {
         background-color: blue;
@@ -50,10 +49,19 @@
         width: 0;
         background-color: blue;
 }
+
+#closeLink{
+	background: none;
+	padding: 0;
+	border-color: transparent;
+	border: none;
+	margin: 0;
+}
 #table{
 border: none;
 width: 100%;
 height: 100%;
+padding: 0px;
 }
 #table tr{
 width: 100%;
@@ -63,6 +71,7 @@ border: none;
 
 #table tr td{
 border: none;
+padding: 0;
 }
 </style>
 <link rel="stylesheet" href="//code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css">
@@ -84,24 +93,22 @@ jQuery(document).ready(function($) {
 	                var start = json.data.lightbox.start;
 	                var duration = json.data.lightbox.duration;
 	                var finish = json.data.lightbox.finish
-	                var easing = 'swing';
-	                var complete = null;
 	                $(function() {
 	                    var progressbar = $( "#progressbar" );
 	                       $( "#progressbar" ).progressbar({
 	                          value: 1,
-	                          max:finish
+	                          max:finish,
+	                          color:'blue',
+	                          backgroundColor:'blue'
 	                       });
 	                    function progress() {
 	                    var val = progressbar.progressbar( "value" ) || start;
 	                    progressbar.progressbar( "value", val + 1 );
 	                    if ( val < finish ) {
 	                       setTimeout( progress, 10 );
-	                       progressbar.progressbar("value").addClass("beginning");
+	                       progressbar.animate({backgroundColor:'blue'});
 	                    }
-	                    else if(val == finish){
-	                    	progressbar.append('<div id="created_div">Progress Complete</div>');
-	                    }
+	                    
 	                 }
 	                 setTimeout( progress, duration );
 	              });
@@ -154,16 +161,18 @@ $('#closeLink').click( function() {
 	<div id="lightbox" >
 		<div id="content">
 		<table id="table">
-		<tr height="30%"><td align="left" width="70%">
-		<div id="lightboxTitle">Progress</div>
-		</td>
-		<td align="right">
-		<img id="closeLink" alt="" src="/images/close.png" border="none">
-		</td>
-		</tr>
-		<tr align="center"><td align="center" width="100%">
-		<div id="progressbar"></div>
-		</td></tr>
+			<tr height="25%" bgcolor="gray" bordercolor="gray">
+			<td valign="middle" align="justify">
+				<div id="lightboxTitle" align="left">Progress</div>
+				<div align="right" style="padding:'0'">
+				<img id="closeLink" alt="" src="../images/close.png">
+				</div>
+			</td>
+			</tr>
+			<tr valign="middle">
+			<td  valign="middle" width="70%" align="center">
+				<div id="progressbar"></div>
+			</td></tr>
 		</table>
 		</div>
 	</div>
