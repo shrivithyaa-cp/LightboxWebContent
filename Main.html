@@ -112,9 +112,10 @@ jQuery(document).ready(function($) {
 	                     var value = this.getAttribute( "aria-valuenow" );
 	                     if (value < finish){
 	                         $(selector).css({ 'background': 'blue' });
+	                        // $("#progressText").html("Progress :" +val);
 	                     } else{
 	                         $(selector).css({ 'background': 'green' });
-	                         progressbar.append('<br/><div id="text">Progress Complete</div>');
+	                         $("#progressText").html("Progress Complete");
 	                     }
 	                 });
 	              });
@@ -178,6 +179,8 @@ $('#closeLink').click( function() {
 			<tr valign="middle">
 			<td  valign="middle" width="70%" align="center">
 				<div id="progressbar"></div>
+				<br/>
+				<div id="progressText">Progress:</div>
 			</td></tr>
 		</table>
 		</div>
